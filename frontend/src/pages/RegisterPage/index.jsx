@@ -1,5 +1,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
+import { registerUser } from '../../store/thunkFunctions'
 
 const RegisterPage = () => {
   const { register, 
@@ -7,7 +9,19 @@ const RegisterPage = () => {
     formState: { errors },  // 유효성 체크시 통과를 못했을 경우 errors를 통해 에러 메시지를 보여줌
     reset } = useForm({mode: 'onChange'})
 
+    const dispatch = useDispatch();
+
     const onSubmit = ({ email, password, name }) => { // 인자로 받아오는게 email, password, name value들
+
+      const body = {
+        email,
+        password,
+        name,
+        image: `http://via.placeholder.com/600x400?text=no+user+image`
+      }
+
+      dispatch(registerUser(body));   // registerUser() 라는 thunk 함수를 만들어줌, 이 thunk 함수는 store/thunkFunctions.js 에 생성해줌
+
       reset();
     }
 
