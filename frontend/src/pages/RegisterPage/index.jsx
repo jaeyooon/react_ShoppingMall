@@ -4,10 +4,12 @@ import { useDispatch } from 'react-redux'
 import { registerUser } from '../../store/thunkFunctions'
 
 const RegisterPage = () => {
-  const { register, 
+  const { 
+    register, 
     handleSubmit, 
     formState: { errors },  // 유효성 체크시 통과를 못했을 경우 errors를 통해 에러 메시지를 보여줌
-    reset } = useForm({mode: 'onChange'})
+    reset 
+  } = useForm({mode: 'onChange'})
 
     const dispatch = useDispatch();
 

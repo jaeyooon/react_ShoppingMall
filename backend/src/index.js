@@ -31,7 +31,7 @@ app.post('/', (req, res) => {
 app.use('/users', require('./routes/users'))    // ✨ /users 경로로 요청을 들어오면 ./routes/users 로 전달해줌
 
 app.use((error, req, res, next) => {    // 에러 처리기
-    res.status(err.status || 500);
+    res.status(error.status || 500);
     res.send(error.message || '서버에서 에러가 났습니다.');
 })
 
