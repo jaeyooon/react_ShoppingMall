@@ -37,6 +37,14 @@ userSchema.pre('save', async function(next) {
     next();
 })
 
+userSchema.methods.comparePassword = async function(plainPassword) {
+    let user = this;    // DB에 있는 유저 정보가 들어가있음.
+    console.log(user);
+
+    // plainPassword 123456 과 DB에 있는 암호화된 비밀번호(해시된 비밀번호)가 같은지 비교
+    const match = await bcrypt.compare(plainPassword, user.password);   
+    return match;   // true 아니면 false
+}
 
 const User = mongoose.model("User", userSchema);    // 스키마 이용해서 Model 생성
 
