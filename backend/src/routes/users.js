@@ -2,6 +2,19 @@ const express = require('express');
 const User = require('../models/User');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const auth = require('../middleware/auth');
+
+router.get('/auth',auth, async (req, res, next) => {    
+    
+    return res.json({   // 미들웨어를 통해 가져온 인증이 되어있는 유저의 데이터를 client에 보내줌.
+        id: req.user._id,
+        email: req.user.email,
+        name: req.user.name,
+        role: req.user.role,
+        image: req.user.image,
+    })
+})    
+
 
 router.post('/register', async (req, res, next) => {    
     // MongoDB에 유저 데이터 저장(Model 이용)
@@ -48,5 +61,17 @@ router.post('/login', async (req, res, next) => {
     }
 
 })  
+
+
+router.post('/logout', auth, async (req, res, next) => {    
+    // auth 미들웨어를 통과하면 올바른 유저인것 (auth에서 유효한 토큰인지 여부 체크)
+    try {
+        return res.sendStatus(200);
+    } catch (error) {
+        next(error);    // error와 함께 에러 처리기에 보내줌.
+    }
+
+})    
+
 
 module.exports = router;

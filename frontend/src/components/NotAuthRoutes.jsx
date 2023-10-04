@@ -1,8 +1,10 @@
 //import React from 'react'
 
-const NotAuthRoutes = () => {
+import { Navigate, Outlet } from "react-router-dom"
+
+const NotAuthRoutes = ({ isAuth }) => {
   return (
-    <div>NotAuthRoutes</div>
+    isAuth ? <Navigate to={'/'} /> : <Outlet />    // 아무나 갈 수 있는 경로로 이동하도록
   )
 }
 

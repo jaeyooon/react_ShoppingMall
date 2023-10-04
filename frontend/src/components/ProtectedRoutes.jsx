@@ -1,8 +1,9 @@
-//import React from 'react'
+import React from 'react'
+import { Navigate, Outlet } from "react-router-dom"
 
-const ProtectedRoutes = () => {
+const ProtectedRoutes = ({ isAuth }) => {     // isAuth를 App.jsx에서 props로 가져옴
   return (
-    <div>ProtectedRoutes</div>
+    isAuth ? <Outlet /> : <Navigate to={'/login'} />  // isAuth가 false면 login 페이지로 이동
   )
 }
 

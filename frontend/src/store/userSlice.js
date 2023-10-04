@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { loginUser, registerUser } from "./thunkFunctions";
+import { authUser, loginUser, logoutUser, registerUser } from "./thunkFunctions";
 import { toast } from "react-toastify";
 
 const initialState = {
@@ -48,6 +48,37 @@ const userSlice = createSlice({
                 state.error = action.payload;
                 toast.error(action.payload);
             })
+
+            .addCase(authUser.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(authUser.fulfilled, (state, action) => {   
+                state.isLoading = false;
+                state.userData = action.payload;    
+                state.isAuth = true;
+            })
+            .addCase(authUser.rejected, (state, action) => {    // 토큰이 만료되었을 경우
+                state.isLoading = false;
+                state.error = action.payload;
+                state.isAuth = false;
+                localStorage.removeItem('accessToken');     // 토큰 지워줌.
+            })
+
+            .addCase(logoutUser.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(logoutUser.fulfilled, (state, action) => {   
+                state.isLoading = false;
+                state.userData = initialState.userData;    // 유저 데이터 초기화
+                state.isAuth = false;
+                localStorage.removeItem('accessToken');     
+            })
+            .addCase(logoutUser.rejected, (state, action) => {    
+                state.isLoading = false;
+                state.error = action.payload;
+                toast.error(action.payload);
+            })
+
     }
 })
 

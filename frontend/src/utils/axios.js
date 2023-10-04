@@ -5,4 +5,15 @@ const axiosInstance = axios.create({
         '' : 'http://localhost:4000' 
 })
 
+
+// 요청이 보내지기 전에 어떠한 것을 하고싶을 때 여기서 설정
+axiosInstance.interceptors.request.use(function(config) {
+
+    // ✨'Bearer ' + localStorage.getItem('accessToken')를 Request Headers에 전달함으로서 요청을 보낼때 토큰도 같이 보내지도록 함!
+    config.headers.Authorization = 'Bearer ' + localStorage.getItem('accessToken');
+    return config;
+}, function(error) {    // 요청에 에러가 있을 경우, 여기서 처리해줌.
+    return Promise.reject(error);
+})
+
 export default axiosInstance
