@@ -19,7 +19,15 @@ const userSchema = mongoose.Schema({    // 스키마 생성
         type: Number,
         default: 0  // 일반유저 : 0, Admin 유저 : 1
     },
-    image: String
+    image: String,
+    cart: {
+        type: Array,
+        default: []
+    },
+    history: {
+        type: Array,
+        default: []
+    }
 })
 
 

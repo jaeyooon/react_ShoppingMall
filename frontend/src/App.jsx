@@ -13,6 +13,10 @@ import { authUser } from './store/thunkFunctions'
 import ProtectedPage from './pages/ProtectedPage'
 import ProtectedRoutes from './components/ProtectedRoutes'
 import NotAuthRoutes from './components/NotAuthRoutes'
+import UploadProductPage from './pages/UploadProductPage'
+import DetailProductPage from './pages/DetailProductPage'
+import CartPage from './pages/CartPage'
+import HistoryPage from './pages/HistoryPage'
 
 function Layout() {
   return (
@@ -50,11 +54,16 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />} >
+    {/* 로그인과 상관없이 갈 수 있는 경로 */}
         <Route index element={<LandingPage />} />
 
     {/* 로그인한 사람만 갈 수 있는 경로 */}
         <Route element={<ProtectedRoutes isAuth={isAuth} />}>   {/* 중첩 라우팅을 이용 */}
           <Route path="/protected" element={<ProtectedPage />} />
+          <Route path="/product/upload" element={<UploadProductPage />} />
+          <Route path="/product/:productId" element={<DetailProductPage />} />
+          <Route path="/user/cart" element={<CartPage />} />
+          <Route path="/history" element={<HistoryPage />} />
         </Route>
 
 
