@@ -1,3 +1,4 @@
+const { Schema } = require('mongoose');
 const mongoose = require('mongoose');
 
 const productSchema = mongoose.Schema({    // 스키마 생성

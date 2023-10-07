@@ -28,7 +28,8 @@ app.post('/', (req, res) => {
     res.json(req.body);
 })    
 
-app.use('/users', require('./routes/users'))    // ✨ /users 경로로 요청을 들어오면 ./routes/users 로 전달해줌
+app.use('/users', require('./routes/users'));    // ✨ /users 경로로 요청을 들어오면 ./routes/users 로 전달해줌
+app.use('/products', require('./routes/products')); 
 
 app.use((error, req, res, next) => {    // 에러 처리기
     res.status(error.status || 500);
