@@ -25,6 +25,34 @@ router.post('/image',auth, async (req, res, next) => {
 })    
 
 
+router.get('/', async (req, res, next) => {    // 데이터를 가져오는 것이므로 get 요청
+    // asc 오름차순, desc 내림차순
+    const order = req.query.order ? req.query.order : 'desc';   // 상품 정렬 옵션-내림차순 or 오름차순 (localhost:4000/product?order=desc)
+    const sortBy = req.query.sortBy ? req.query.sortBy : '_id';   // _id를 이용해서 정렬
+    const limit = req.query.limit ? Number(req.query.limit) : 20;
+    const skip = req.query.skip ? Number(req.query.skip) : 0;
+    
+    try {
+        const products = await Product.find()
+        .populate('writer')     // populate을 통해 해당 writer의 모든 정보를 가져올 수 있음
+        .sort([[sortBy, order]])
+        .skip(skip)
+        .limit(limit)
+
+        const productsTotal = await Product.countDocuments();   // MongoDB에서 document 는 row
+        const hasMore = skip + limit < productsTotal ? true : false;
+   
+        return res.status(200).json({
+            products,    // Client에 products를 보내줌.
+            hasMore     // Clinet에 hasMore 보내줌으로서 더보기 버튼 표시 유무 결정
+        })
+
+    } catch (error) {
+        next(error);   
+    }
+})
+
+
 router.post('/',auth, async (req, res, next) => {    // 로그인이 된 사람만 상품 업로드 가능하도록 해야하므로 auth middleware 필요
     try {
         const product = new Product(req.body);    // 객체 생성
