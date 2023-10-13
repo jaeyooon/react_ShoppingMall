@@ -34,6 +34,16 @@ const productSchema = mongoose.Schema({    // 스키마 생성
     }
 }, { timestamps: true }) 
 
+productSchema.index({
+    title: 'text',
+    description: 'text'
+}, {
+    weights: {    // 중요도
+        title: 5,
+        description: 1
+    }
+})
+
 const Product = mongoose.model("Product", productSchema);    // 스키마 이용해서 Model 생성
 
 module.exports = Product; 

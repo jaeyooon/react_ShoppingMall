@@ -4,10 +4,12 @@ import RadioBox from './Sections/RadioBox';
 import SearchInput from './Sections/SearchInput';
 import CardItem from './Sections/CardItem';
 import axiosInstance from '../../utils/axios';
+import { continents, prices } from '../../utils/filterData';
 
 const LandingPage = () => {
 
   const limit = 4;    // 처음 데이터를 가져올 때와 더보기 버튼을 눌러서 가져올 때 몇 개의 데이터를 한번에 가져오는지
+  const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState([]);
   const [skip, setSkip] = useState(0);  // 몇번째부터 상품 데이터를 가져와야하는지(몇 개의 상품을 skip하는지), ex) 4개를 가져온 후엔 +4 해줌
   const [hasMore, setHasMore] = useState(false);  // 더 가져올 product가 있는지 확인,  true 일때만 더보기를 보여주면 됨!
@@ -15,7 +17,7 @@ const LandingPage = () => {
     continents: [],
     price: []
   })
-
+  
   useEffect(() => {
     fetchProducts({ skip, limit });
   }, [])  // 컴포넌트가 마운트된 다음에 한번만 렌더링 될 수 있도록 두번째 파라미터 빈 배열로
@@ -46,10 +48,60 @@ const LandingPage = () => {
       skip: skip + limit,
       limit,
       loadMore: true,
-      filters
+      filters,
+      searchTerm
     }
     fetchProducts(body);
     setSkip(skip + limit);
+  }
+
+  const handleFilters = (newFilteredData, category) => {
+    const newFilters = {...filters};  // state의 불변성을 지켜주기 위해 Spread Operator 를 이용해서 얕은 복사를 해줌.
+    newFilters[category] = newFilteredData;
+
+    if(category === 'price') {
+      const priceValues = handlePrice(newFilteredData);   // newFilteredData에 들어올 때는 _id 값이므로 이를 prices의 array 값이 들어가도록 하기 위해 함수 호풀
+      newFilters[category] = priceValues;
+    }
+
+    showFilteredResults(newFilters);
+    setFilters(newFilters);   // filters state 업데이트
+  }
+
+  const handlePrice = (value) => {
+    let array = [];
+
+    for(let key in prices) {
+      if(prices[key]._id === parseInt(value, 10)) {
+        array = prices[key].array;
+      }
+    }
+    return array;
+  }
+
+  const showFilteredResults = (filters) => {  // 필터링 된 것에 해당되는 데이터를 백엔드에 요청에서 가져오도록 함.
+    //console.log(filters);
+    const body = {
+      skip: 0,  // 필터링 된 것들로 데이터를 새롭게 가져오는 것이므로 첫 번째부터 상품 정렬
+      limit,
+      filters,
+      searchTerm
+    }
+
+    fetchProducts(body);
+    setSkip(0);
+  }
+
+  const handleSearchTerm = (event) => {
+    const body = {
+      skip: 0,
+      limit,
+      filters,
+      searchTerm: event.target.value
+    }
+    setSkip(0);
+    setSearchTerm(event.target.value);
+    fetchProducts(body);
   }
 
   return (
@@ -61,16 +113,20 @@ const LandingPage = () => {
       {/* Filter */}
       <div className='flex gap-3'>
         <div className='w-1/2'>
-          <CheckBox />
+          <CheckBox continents={continents} checkedContinents={filters.continents}  // checkedContinents 에는 체크박스에서 클릭한 것들이 continents 배열에 들어감.
+            onFilters={filters => handleFilters(filters, "continents")}
+          />
         </div>
         <div className='w-1/2'>
-          <RadioBox />
+          <RadioBox prices={prices} checkedPrice={filters.price} 
+            onFilters={filters => handleFilters(filters, "price")}
+          />
         </div>
       </div>
 
       {/* Search */}
-      <div className='flex justify-end'>
-        <SearchInput />
+      <div className='flex justify-end mb-3'>
+        <SearchInput searchTerm={searchTerm} onSearch={handleSearchTerm} />
       </div>
 
       {/* Card */}

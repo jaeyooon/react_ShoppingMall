@@ -31,15 +31,39 @@ router.get('/', async (req, res, next) => {    // 데이터를 가져오는 것�
     const sortBy = req.query.sortBy ? req.query.sortBy : '_id';   // _id를 이용해서 정렬
     const limit = req.query.limit ? Number(req.query.limit) : 20;
     const skip = req.query.skip ? Number(req.query.skip) : 0;
+    const term = req.query.searchTerm;
+
+    let findArgs = {};  // 객체
+    for (let key in req.query.filters) {     // filters의 key ===> continents 또는 prices
+        if (req.query.filters[key].length > 0) {     // 체크박스(continents)나 라디오박스(price)에 체크된 것이 있을 경우
+            if (key === 'price') {
+                findArgs[key] = {
+                    // Greater than equal
+                    $gte: req.query.filters[key][0],
+                    // Less than equal
+                    $lte: req.query.filters[key][1]
+                }
+                
+            } else {
+                findArgs[key] = req.query.filters[key]; 
+            }              
+        }
+    }
+
+    if(term) {
+        findArgs["$text"] = { $search: term };
+    }
+
+    console.log(findArgs);
     
     try {
-        const products = await Product.find()
+        const products = await Product.find(findArgs)   // findArgs를 통해 필터링 된 데이터만 가져올 수 있게 됨.
         .populate('writer')     // populate을 통해 해당 writer의 모든 정보를 가져올 수 있음
         .sort([[sortBy, order]])
         .skip(skip)
         .limit(limit)
 
-        const productsTotal = await Product.countDocuments();   // MongoDB에서 document 는 row
+        const productsTotal = await Product.countDocuments(findArgs);   // MongoDB에서 document 는 row, findArg로 조건을 줘서 더보기 버튼 표시 유무 결정
         const hasMore = skip + limit < productsTotal ? true : false;
    
         return res.status(200).json({
