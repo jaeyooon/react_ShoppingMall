@@ -76,4 +76,55 @@ router.post('/logout', auth, async (req, res, next) => {
 })    
 
 
+router.post('/cart', auth, async (req, res, next) => {    
+    // auth 미들웨어를 통과하면 올바른 유저인것 (auth에서 유효한 토큰인지 여부 체크)
+    try {
+        
+        // 먼저 User Collection에 해당 유저의 정보를 가져오기
+        const userInfo = await User.findOne({ _id: req.user._id })
+
+        // 가져온 정보에서 카트에 넣으려는 상품이 이미 들어있는지 확인
+        let duplicate = false;
+        userInfo.cart.forEach((item) => {
+            if(item.id === req.body.productId) {
+                duplicate = true;
+            }
+        })
+
+        // 상품이 이미 들어있을 때
+        if(duplicate) {
+            const user = await User.findOneAndUpdate(
+                { _id: req.user._id, "cart.id": req.body.productId },     // find
+                { $inc: { "cart.$.quantity": 1 } },     // update, 상품 수량 증가
+                { new: true }      // option, {new: true} option 을 통해 User의 데이터를 업데이트된 것으로 리턴
+            )
+
+            return res.status(201).send(user.cart);  // client에 전달
+        }
+        // 새로운 상품이 들어가는 경우
+        else {
+            const user = await User.findOneAndUpdate(
+                { _id: req.user._id },
+                { 
+                    $push: {
+                        cart: {
+                            id: req.body.productId,
+                            quantity: 1,
+                            date: Date.now()
+                        }
+                    }
+                 },
+                {new: true}
+            )
+
+            return res.status(201).send(user.cart);
+        }
+
+    } catch (error) {
+        next(error);    // error와 함께 에러 처리기에 보내줌.
+    }
+
+})
+
+
 module.exports = router;

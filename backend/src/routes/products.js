@@ -25,6 +25,26 @@ router.post('/image',auth, async (req, res, next) => {
 })    
 
 
+router.get('/:id', auth, async(req, res, next) => {
+
+    const type = req.query.type;
+    let productIds = req.params.id;
+
+    // productId를 이용해서 DB에서 productId와 같은 상품의 정보를 가져옴.
+    try {
+        const product = await Product
+            .find({ _id: { $in: productIds } })
+            .populate('writer');
+
+            return res.status(200).send(product);
+
+    } catch (error) {
+        next(error);
+    }
+
+})
+
+
 router.get('/', async (req, res, next) => {    // 데이터를 가져오는 것이므로 get 요청
     // asc 오름차순, desc 내림차순
     const order = req.query.order ? req.query.order : 'desc';   // 상품 정렬 옵션-내림차순 or 오름차순 (localhost:4000/product?order=desc)
