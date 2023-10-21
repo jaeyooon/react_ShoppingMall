@@ -30,6 +30,16 @@ router.get('/:id', auth, async(req, res, next) => {
     const type = req.query.type;
     let productIds = req.params.id;
 
+    if(type === 'array') {
+        // id = 123456678, 13456789, 14567890
+        // productIds = ['123456678', '13456789', '14567890'] 이런식으로 들어가도록 해줌
+
+        let ids = productIds.split(',');
+        productIds = ids.map(item => {
+            return item
+        })
+    }
+
     // productId를 이용해서 DB에서 productId와 같은 상품의 정보를 가져옴.
     try {
         const product = await Product

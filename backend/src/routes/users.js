@@ -1,5 +1,6 @@
 const express = require('express');
 const User = require('../models/User');
+const Product = require('../models/Product');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const auth = require('../middleware/auth');
@@ -126,5 +127,38 @@ router.post('/cart', auth, async (req, res, next) => {
 
 })
 
+
+router.delete('/cart', auth, async (req, res, next) => {
+    try {
+        // cart에서 삭제하고자 하는 상품 DB에서 삭제
+        const userInfo = await User.findOneAndUpdate(
+            {_id: req.user._id},     // find, 해당 유저의 카트 목록에서 상품을 삭제하고자 하므로
+            {
+                "$pull":
+                    { "cart": { "id": req.query.productId } }
+            },     // update
+            {new: true}      // option
+        )
+
+        const cart = userInfo.cart;
+        const array = cart.map(item => {    // array에는 cart에 들어있는 상품의 id들이 들어가있음
+            return item.id
+        })
+
+        // Product Collection에서 현재 남아있는 상품들의 정보 가져오기
+        const productInfo = await Product   // productInfo <=== cart에 들어있는 상품 정보가 담겨있음
+            .find({_id: {$in: array}}) // array에 들어있는 상품 id를 이용해서 각각에 해당하는 상품 정보 가져옴
+            .populate('writer')
+
+        return res.json({
+            productInfo,
+            cart
+        })
+        
+
+    } catch (error) {
+        next(error);
+    }
+})
 
 module.exports = router;
