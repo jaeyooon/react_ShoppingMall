@@ -11,7 +11,7 @@ const CartTable = ({ products, onRemoveItem }) => {
 
     const renderItems = (
         products.length > 0 && products.map(product => (
-            <tr>
+            <tr key={product._id}>
                 <td>
                     <img 
                         className='w-[70px]'

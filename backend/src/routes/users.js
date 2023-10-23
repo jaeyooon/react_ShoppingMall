@@ -1,9 +1,12 @@
 const express = require('express');
 const User = require('../models/User');
 const Product = require('../models/Product');
+const Payment = require('../models/Payment');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const auth = require('../middleware/auth');
+const crypto = require('crypto');
+const async = require('async');
 
 router.get('/auth',auth, async (req, res, next) => {    
     
@@ -159,6 +162,73 @@ router.delete('/cart', auth, async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+})
+
+router.post('/payment', auth, async (req, res) => {
+
+    // 1. User Collection 안에 History 필드 안에 간단한 결제 정보 넣어주기
+    let history = [];
+    let transactionData = {};
+
+
+    req.body.cartDetail.forEach((item) => {
+        history.push({
+            dateOfPurchase: new Date().toISOString(),
+            name: item.title,
+            id: item._id,
+            price: item.price,
+            quantity: item.quantity,
+            paymentId: crypto.randomUUID()  // 랜덤값 생성함으로서 고유한 Id 갖도록
+        })
+    })
+
+    // 2. Payment Collection 안에 자세한 결제 정보 넣어주기
+    transactionData.user = {
+        id: req.user._id,
+        name: req.user.name,
+        email: req.user.email
+    }
+
+    transactionData.product = history;  // history 배열의 데이터들을 넣어줌.
+
+    // ----- user Collection
+    // history 정보 DB에 저장
+    // $each 가 있어야 history 배열안에 객체로 들어가게 됨.
+    await User.findOneAndUpdate(
+        { _id: req.user._id },
+        { $push: { history: { $each: history } }, $set: { cart: [] } }      // $set 을 이용해서 cart 필드는 빈 배열로 함으로서 원래 카트에 있던 것들을 비워줌
+    )
+
+    // ----- payment Collection
+    const payment = new Payment(transactionData);
+    const paymentDocs = await payment.save();
+
+    //console.log(paymentDocs);
+
+    //  3. product collection 안에 있는 sold 필드 정보 업데이트 시켜주기
+
+    // 상품 당 몇 개의 quantity를 샀는지
+    let products = [];
+    paymentDocs.product.forEach(item => {
+        products.push({ id: item.id, quantity: item.quantity })
+    })
+
+
+    async.eachSeries(products, async (item) => {
+        await Product.updateOne(
+            {_id: item.id},
+            {
+                $inc: {
+                    "sold": item.quantity   // item.quantity 만큼 increment 해줌.
+                }
+            }
+        )
+    },
+    (err) => {  // callback 부분
+        if(err) return res.status(500).send(err)
+        return res.sendStatus(200)
+    })
+
 })
 
 module.exports = router;

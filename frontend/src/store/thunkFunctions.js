@@ -138,3 +138,21 @@ export const removeCartItem = createAsyncThunk(
         }                                                                            // So, 화면에 보여주거나 스낵바를 이용해서 에러 메시지를 보여줄 수 있음.
     }
 )
+
+
+export const payProducts = createAsyncThunk(
+    "user/payProducts",
+    async (body, thunkAPI) => {     // payloadCreator 
+        try {
+            const response = await axiosInstance.post(   
+                `/users/payment`,          
+                body
+            );
+                      
+            return response.data;   // 백엔드에서 전달한 데이터인 response.data는 action.payload
+        } catch(error) {
+            console.log(error);
+            return thunkAPI.rejectWithValue(error.response.data || error.message)   // rejectWithValue() 에 string 값을 넣어주면 해당 string 값이 action payload가 됨
+        }                                                                            // So, 화면에 보여주거나 스낵바를 이용해서 에러 메시지를 보여줄 수 있음.
+    }
+)

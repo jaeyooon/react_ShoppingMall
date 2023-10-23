@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { addToCart, authUser, getCartItems, loginUser, logoutUser, registerUser, removeCartItem } from "./thunkFunctions";
+import { addToCart, authUser, getCartItems, loginUser, logoutUser, payProducts, registerUser, removeCartItem } from "./thunkFunctions";
 import { toast } from "react-toastify";
 
 const initialState = {
@@ -113,6 +113,20 @@ const userSlice = createSlice({
                 toast.info('상품이 장바구니에서 삭제되었습니다.')
             })
             .addCase(removeCartItem.rejected, (state, action) => {    
+                state.isLoading = false;
+                state.error = action.payload;
+                toast.error(action.payload);
+            })
+            .addCase(payProducts.pending, (state) => {
+                state.isLoading = true;
+            })            
+            .addCase(payProducts.fulfilled, (state, action) => {   
+                state.isLoading = false;
+                state.cartDetail = [];
+                state.userData.cart = [];
+                toast.info('상품 구매를 완료하였습니다.')
+            })
+            .addCase(payProducts.rejected, (state, action) => {    
                 state.isLoading = false;
                 state.error = action.payload;
                 toast.error(action.payload);

@@ -15,6 +15,8 @@ const routes = [
 
 const NavItem = ({ mobile }) => {   // Navbar 에서 mobile을 props로 가져옴
   const isAuth = useSelector(state => state.user?.isAuth)    //  user가 있을 때만
+  const cart = useSelector(state => state.user?.userData?.cart)
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -45,7 +47,7 @@ const NavItem = ({ mobile }) => {   // Navbar 에서 mobile을 props로 가져�
                 {icon}
                 <span className='absolute top-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white
                  bg-red-500 border-2 border-white rounded-full -right-3'>
-                    {1}     {/* 쇼핑카트 숫자 뱃지 */}
+                    {cart?.length}     {/* 쇼핑카트 숫자 뱃지 */}
                 </span>
               </Link>
             </li>
