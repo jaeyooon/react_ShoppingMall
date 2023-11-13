@@ -1,5 +1,5 @@
 <div align=center>
-  <h2> React와 NodeJS 사용하여 쇼핑몰 웹 사이트 구현</h2><br/>
+  <h2> React와 NodeJS 사용하여 쇼핑몰 웹 사이트 구현</h2>
   <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white">
   <img src="https://img.shields.io/badge/Tailwind CSS-06B6D4?style=for-the-badge&logo=Tailwind CSS&logoColor=white">
   <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=Vite&logoColor=white">
