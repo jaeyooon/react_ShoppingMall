@@ -61,10 +61,10 @@ const CartPage = () => {
       {cartDetail?.length > 0 ?
         <>
           <CartTable products={cartDetail} onRemoveItem={handleRemoveCartItem} />
-          <div className='mt-10'>
-            <p><span className='font-bold'>합계:</span>{total} 원</p>
+          <div className='mt-10 flex justify-end items-center'>
+            <span className='font-bold pr-1'>합계:</span><span>{total} 원</span>
             <button
-              className='text-white bg-black hover:bg-gray-500 rounded-md px-4 py-2 mt-5'
+              className='ml-5 mb-5 text-white bg-stone-800 hover:bg-neutral-600 rounded-md px-4 py-2 mt-5'
               onClick={handlePaymentClick}
             >
               결제하기

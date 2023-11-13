@@ -17,6 +17,7 @@ import UploadProductPage from './pages/UploadProductPage'
 import DetailProductPage from './pages/DetailProductPage'
 import CartPage from './pages/CartPage'
 import HistoryPage from './pages/HistoryPage'
+import AllHistoryPage from './pages/HistoryPage/Sections/AllHistoryPage'
 
 function Layout() {
   return (
@@ -64,6 +65,7 @@ function App() {
           <Route path="/product/:productId" element={<DetailProductPage />} />
           <Route path="/user/cart" element={<CartPage />} />
           <Route path="/history" element={<HistoryPage />} />
+          <Route path="/allhistory" element={<AllHistoryPage />} />
         </Route>
 
 

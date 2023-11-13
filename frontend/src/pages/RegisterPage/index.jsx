@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import { registerUser } from '../../store/thunkFunctions'
@@ -19,12 +19,19 @@ const RegisterPage = () => {
         email,
         password,
         name,
-        image: `http://via.placeholder.com/600x400?text=no+user+image`
+        image: `http://via.placeholder.com/600x400?text=no+user+image`,
+        role
       }
 
       dispatch(registerUser(body));   // registerUser() 라는 thunk 함수를 만들어줌, 이 thunk 함수는 store/thunkFunctions.js 에 생성해줌
 
       reset();
+    }
+
+    const [role, setRole] = useState(0);
+
+    const handleRole = (event) => {     
+      setRole(parseInt(event.target.value))
     }
 
     // ✨ 유효성 체크를 위해서
@@ -52,6 +59,17 @@ const RegisterPage = () => {
         </h1>
         <form className='mt-6' onSubmit={handleSubmit(onSubmit)}> {/* margin top */}
           <div className='mb-2'>  {/* margin bottom */}
+            <div>
+              <select 
+                value={role} 
+                onChange={handleRole}
+                className='p-0.5 mb-4 text-sm font-semibold text-gray-800 border border-stone-800 rounded-md'
+              >
+                <option value={0}>일반회원</option>
+                <option value={1}>관리자</option>
+              </select>
+            </div>
+           
             <label
               htmlFor='email'   // input의 id와 같게 해줌
               className='text-sm font-semibold text-gray-800'
@@ -115,7 +133,7 @@ const RegisterPage = () => {
           </div>
 
           <div className='mt-6'>
-            <button type='submit' className='w-full bg-black text-white px-4 py-2 rounded-md hover:bg-gray-700 duration-200'>
+            <button type='submit' className='w-full text-white px-4 py-2 rounded-md bg-stone-800 hover:bg-neutral-700 duration-200'>
               회원가입
             </button>
           </div>

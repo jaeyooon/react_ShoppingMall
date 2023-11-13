@@ -231,4 +231,15 @@ router.post('/payment', auth, async (req, res) => {
 
 })
 
+router.get('/allPayments', auth, async (req, res) => {
+
+    try {
+        const allPayments = await Payment.find()
+        res.status(200).json({ allPayments });
+    } catch (error) {
+        
+    }
+
+})
+
 module.exports = router;

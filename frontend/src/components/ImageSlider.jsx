@@ -10,7 +10,7 @@ const ImageSlider = ({images}) => {     // 부모 컴포넌트인 CardItem으로
                     <img 
                         src={`${import.meta.env.VITE_SERVER_URL}/${image}`}     //이미지는 백엔드에 저장되어있음.
                         alt={image}
-                        className='w-full max-h-[150px]'
+                        className='w-full lg:max-h-[120px] md:max-h-[100px] sm:max-h-[76px]' 
                     />                      
                 </div>
             ))}         

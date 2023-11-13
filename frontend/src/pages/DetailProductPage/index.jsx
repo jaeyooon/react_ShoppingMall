@@ -27,11 +27,8 @@ const DetailProductPage = () => {
 
   return (
     <section>
-      <div className='text-center'>
-        <h1 className='p-4 text-2xl'>{product.title}</h1>
-      </div>
 
-      <div className='flex gap-4'>
+      <div className='mt-20 flex gap-4'>
         <div className='w-1/2'>
           {/* ProductImage */}
           <ProductImage product={product} />    {/* 해당 컴포넌트에 product state를 props로 내려줌. */}
@@ -39,7 +36,7 @@ const DetailProductPage = () => {
         <div className='w-1/2'>
           {/* ProductInfo */}
           <ProductInfo product={product} />
-        </div>
+        </div>        
       </div>
     </section>
   )

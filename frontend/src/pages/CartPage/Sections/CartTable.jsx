@@ -1,4 +1,6 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+import { BsTrash } from 'react-icons/bs';
 
 const CartTable = ({ products, onRemoveItem }) => {
 
@@ -12,24 +14,29 @@ const CartTable = ({ products, onRemoveItem }) => {
     const renderItems = (
         products.length > 0 && products.map(product => (
             <tr key={product._id}>
-                <td>
-                    <img 
-                        className='w-[70px]'
-                        alt='product'
-                        src={renderCartImage(product.images)}
-                    />
+                <td className='w-[110px]'>
+                    <Link to={`/product/${product._id}`}>
+                        <img 
+                            className='w-[100px] h-[70px]'
+                            alt='product'
+                            src={renderCartImage(product.images)}
+                        />
+                    </Link>                   
                 </td>
-                <td>
+                <td className='w-[110px]'>
+                    {product.title}
+                </td>
+                <td className='w-[110px]'>
                     {product.quantity} 개
                 </td>
-                <td>
+                <td className='w-[110px]'>
                     {product.price} 원
                 </td>
-                <td>
+                <td className='w-[110px]'>
                     <button
                         onClick={() => onRemoveItem(product._id)}
                     >
-                        지우기
+                        <BsTrash style={{ fontSize: '1.2rem' }} />
                     </button>
                 </td>
             </tr>
@@ -37,10 +44,11 @@ const CartTable = ({ products, onRemoveItem }) => {
     )
 
     return (
-        <table className='w-full text-sm text-left text-gray-500'>
+        <table className='w-full text-left text-gray-500'>
             <thead className='border-[1px]'>
                 <tr>
-                    <th>사진</th>
+                    <th>상품</th>
+                    <th></th>
                     <th>개수</th>
                     <th>가격</th>
                     <th>삭제</th>

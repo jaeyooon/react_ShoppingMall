@@ -106,8 +106,8 @@ const LandingPage = () => {
 
   return (
     <section>
-      <div className='text-center m-7'>
-        <h2 className='text-2xl'>여행 상품 사이트</h2>
+      <div className='text-center m-7 text-gray-800'>
+        <span className='text-xl font-semibold italic underline decoration-double decoration-blue-400/40 underline-offset-4'>그곳이 어디든</span><span className='text-xl font-medium'>, Smile Tour :D</span>
       </div>
 
       {/* Filter */}
@@ -125,7 +125,7 @@ const LandingPage = () => {
       </div>
 
       {/* Search */}
-      <div className='flex justify-end mb-3'>
+      <div className='flex justify-end mb-3'>      
         <SearchInput searchTerm={searchTerm} onSearch={handleSearchTerm} />
       </div>
 
@@ -141,7 +141,7 @@ const LandingPage = () => {
         <div className='flex justify-center mt-5'>
         <button 
           onClick={handleLoadMore}
-          className='px-4 py-2 mt-5 text-white bg-black rounded-md hover:bg-gray-500'>
+          className='px-4 py-2 mt-5 text-white bg-stone-800 rounded-md hover:bg-neutral-700'>
           더보기
         </button>
       </div>

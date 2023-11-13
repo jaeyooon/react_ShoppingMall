@@ -64,7 +64,7 @@ const UploadProductPage = () => {
   return (
     <section>
       <div className='text-center m-7'>
-        <h1>예상 상품 업로드</h1>
+        <h1>상품 업로드</h1>
       </div>
 
       <form className='mt-6' onSubmit={handleSubmit}>   {/* margin top */}
@@ -111,7 +111,7 @@ const UploadProductPage = () => {
           <button 
           type='submit'
           className='w-full px-4 text-white bg-black rounded-md hover:bg-gray-700 py-2'>
-            생성하기
+            추가하기
           </button>
         </div>
 

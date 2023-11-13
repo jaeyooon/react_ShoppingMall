@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import dayjs from 'dayjs'
+import { Link } from 'react-router-dom'
 
 const HistoryPage = () => {
 
@@ -9,23 +10,26 @@ const HistoryPage = () => {
   return (
     <section>
       <div className='text-center m-7'>
-        <h2 className='text-2xl'>History</h2>
+        <h2 className='text-2xl'>주문 내역</h2>
       </div>
 
-      <table className='w-full text-sm text-left text-gray-500'>
+      <table className='w-full text-left text-gray-500'>
         <thead className='border-[1px]'>
           <tr>
             <th>
-              Payment Id
+              상품
             </th>
             <th>
-              Price
+              가격
             </th>
             <th>
-              Quantity
+              수량
             </th>
             <th>
-              Date of Purchase
+              총금액
+            </th>
+            <th>
+              주문 날짜
             </th>
           </tr>
         </thead>
@@ -33,10 +37,18 @@ const HistoryPage = () => {
         <tbody>
           {userData?.history.map(item => (
             <tr className='border-b' key={item.id}>
-              <td>{item.id}</td>
+              <td>
+                <button>
+                  <Link to={`/product/${item.id}`}>
+                    {item.name} 
+                  </Link>
+                </button>
+                
+              </td>
               <td>{item.price}</td>
-              <td>{item.quantity}</td>
-              <td>{dayjs(item.dateOfPurchase).format('YYYY-MM-DD HH:mm:ss')}</td>
+              <td>{item.quantity} 개</td>
+              <td>₩ {item.price * item.quantity}</td>
+              <td>{dayjs(item.dateOfPurchase).format('YYYY-MM-DD')}</td>
             </tr>
           ))}
         </tbody>

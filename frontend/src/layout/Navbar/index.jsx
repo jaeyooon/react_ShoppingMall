@@ -11,12 +11,12 @@ const Navbar = () => {
   }
 
   return (
-    <section className='relative z-10 text-white bg-gray-900'>
+    <section className='relative z-10 text-sky-900 h-14 bg-gradient-to-r from-amber-50 to-orange-100'>
       <div className='w-full'>  {/* width 전체 사용 */}
         <div className='flex items-center justify-between mx-5 sm:mx-10 lg:mx-20'>
             {/* logo */}
             <div className='flex items-center text-2xl h-14'>
-              <Link to="/">Logo</Link>
+              <Link className='font-mono' to="/">Smile Tour🛫</Link>
             </div>
 
             {/* menu button */}
