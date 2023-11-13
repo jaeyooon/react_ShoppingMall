@@ -1,12 +1,12 @@
 <div align=center>
-  <h2> React와 NodeJS 사용하여 쇼핑몰 웹 사이트 구현</h2>
+  <h2> React와 NodeJS 사용하여 쇼핑몰 웹 사이트 구현</h2><br/>
   <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white">
   <img src="https://img.shields.io/badge/Tailwind CSS-06B6D4?style=for-the-badge&logo=Tailwind CSS&logoColor=white">
   <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=Vite&logoColor=white">
   <img src="https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=Redux&logoColor=white">
   <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white">
-  <img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white"> 
-</div>
+  <img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white">
+</div><br/>
 
 - 웹 서비스 이용 유저를 일반회원과 관리자로 구분하여 두 유저가 사용가능한 공통적인 기능 및 각 유저가 필요로 하는 기능 위주로 쇼핑몰 사이트를 만들어보았습니다.
 
